@@ -1,0 +1,10 @@
+extends layout
+
+block content
+    each photo in photos
+        a(href=photo.src)
+            img(src=photo.thumbnail.url, width=photo.thumbnail.width,
+                height=photo.thumbnail.height, title=photo.title)
+
+block scripts
+    script(src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-lightbox/0.6.1/bootstrap-lightbox.js")

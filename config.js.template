@@ -1,0 +1,12 @@
+exports.googleOAuthDetails = {
+    clientID: "",
+    clientSecret: "",
+    callbackURL: ""
+};
+
+exports.cookieSecret = '';
+exports.sessionSecret = '';
+
+exports.awsKey = '';
+exports.awsSecret = '';
+exports.awsBucket = '';

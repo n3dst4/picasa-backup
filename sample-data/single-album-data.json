@@ -1,0 +1,142 @@
+{
+    "id": [
+        "https://picasaweb.google.com/data/entry/api/user/108985568751275385198/albumid/5905715493129314657"
+    ],
+    "published": [
+        "2013-07-28T07:00:00.000Z"
+    ],
+    "updated": [
+        "2013-07-29T17:03:25.242Z"
+    ],
+    "category": [{
+        "$": {
+            "scheme": "http://schemas.google.com/g/2005#kind",
+            "term": "http://schemas.google.com/photos/2007#album"
+        }
+    }],
+    "title": [{
+        "_": "Wombles Vanguard Veterans",
+        "$": {
+            "type": "text"
+        }
+    }],
+    "summary": [{
+        "$": {
+            "type": "text"
+        }
+    }],
+    "rights": [{
+        "_": "protected",
+        "$": {
+            "type": "text"
+        }
+    }],
+    "link": [{
+        "$": {
+            "rel": "http://schemas.google.com/g/2005#feed",
+            "type": "application/atom+xml",
+            "href": "https://picasaweb.google.com/data/feed/api/user/108985568751275385198/albumid/5905715493129314657"
+        }
+    }, {
+        "$": {
+            "rel": "alternate",
+            "type": "text/html",
+            "href": "https://picasaweb.google.com/108985568751275385198/WomblesVanguardVeterans?locked=true"
+        }
+    }, {
+        "$": {
+            "rel": "self",
+            "type": "application/atom+xml",
+            "href": "https://picasaweb.google.com/data/entry/api/user/108985568751275385198/albumid/5905715493129314657"
+        }
+    }, {
+        "$": {
+            "rel": "edit",
+            "type": "application/atom+xml",
+            "href": "https://picasaweb.google.com/data/entry/api/user/108985568751275385198/albumid/5905715493129314657/32"
+        }
+    }, {
+        "$": {
+            "rel": "http://schemas.google.com/acl/2007#accessControlList",
+            "type": "application/atom+xml",
+            "href": "https://picasaweb.google.com/data/entry/api/user/108985568751275385198/albumid/5905715493129314657/acl"
+        }
+    }],
+    "author": [{
+        "name": [
+            "Neil de Carteret"
+        ],
+        "uri": [
+            "https://picasaweb.google.com/108985568751275385198"
+        ]
+    }],
+    "gphoto:id": [
+        "5905715493129314657"
+    ],
+    "gphoto:name": [
+        "WomblesVanguardVeterans"
+    ],
+    "gphoto:location": [
+        ""
+    ],
+    "gphoto:access": [
+        "protected"
+    ],
+    "gphoto:timestamp": [
+        "1374994800000"
+    ],
+    "gphoto:numphotos": [
+        "12"
+    ],
+    "gphoto:numphotosremaining": [
+        "988"
+    ],
+    "gphoto:bytesUsed": [
+        "20533451"
+    ],
+    "gphoto:user": [
+        "108985568751275385198"
+    ],
+    "gphoto:nickname": [
+        "Neil de Carteret"
+    ],
+    "gphoto:commentingEnabled": [
+        "true"
+    ],
+    "gphoto:commentCount": [
+        "0"
+    ],
+    "media:group": [{
+        "media:content": [{
+            "$": {
+                "url": "https://lh6.googleusercontent.com/-P0c_ijUDoBA/UfVQ84B-YWE/AAAAAAAAIsA/ZcbKLQ1auOI/WomblesVanguardVeterans.jpg",
+                "type": "image/jpeg",
+                "medium": "image"
+            }
+        }],
+        "media:credit": [
+            "Neil de Carteret"
+        ],
+        "media:description": [{
+            "$": {
+                "type": "plain"
+            }
+        }],
+        "media:keywords": [
+            ""
+        ],
+        "media:thumbnail": [{
+            "$": {
+                "url": "https://lh6.googleusercontent.com/-P0c_ijUDoBA/UfVQ84B-YWE/AAAAAAAAIsA/ZcbKLQ1auOI/s160-c/WomblesVanguardVeterans.jpg",
+                "height": "160",
+                "width": "160"
+            }
+        }],
+        "media:title": [{
+            "_": "Wombles Vanguard Veterans",
+            "$": {
+                "type": "plain"
+            }
+        }]
+    }]
+}

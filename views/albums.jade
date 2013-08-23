@@ -1,0 +1,15 @@
+extends layout
+
+block header
+    | Albums
+
+block lead
+    | Roof party Pinterest Etsy butcher, ugh 90's post-ironic Echo Park
+    | thundercats mixtape jean shorts kogi direct trade  cliche swag.  Quinoa
+    | hella freegan, master cleanse kogi sartorial selfies Cosby sweater.
+
+
+block content
+    each album in albums
+        a(href="/picasa/"+album.id)
+            img(src=album.thumbnail.url, title=album.title)
