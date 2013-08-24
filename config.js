@@ -8,7 +8,7 @@
 var local = require('./local-config');
 if (! local) { throw "local-config.js not found - did you create one?" }
 
-module.exports = require('_').extend({
+module.exports = require('underscore').extend({
     // safe, universal defaults can go here
-    lukesDad: 'Darth Vader';
+    //lukesDad: 'Darth Vader'
 }, local);

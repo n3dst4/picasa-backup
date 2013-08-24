@@ -44,14 +44,13 @@ var knoxClient = knox.createClient({
 });
 
 var queue = async.queue(backup, 10);
-
 queue.drain = function(){ console.log("queue empty"); };
+var contentDispRe = /filename="([^"]+)"/;
 
 
 ////////////////////////////////////////////////////////////////////////////////
 
 
-var contentDispRe = /filename="([^"]+)"/;
 
 
 
@@ -147,7 +146,9 @@ function getFilenameFromContDisp(orig) {
 }
 
 
-
+/**
+ * Back up a picture from picasa to s3
+ */
 function backup (details, callback) {
     //src, title, caption, userId, userType
     //var deferred = Q.defer();
