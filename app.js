@@ -15,6 +15,13 @@
     , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
     , inspect = require("eyes").inspector();
 
+// var _oldAuthorizationParams = GoogleStrategy.authorizationParams;
+// GoogleStrategy.authorizationParams = function (options) {
+//     var params = _oldAuthorizationParams(options);
+//     params.access_type = "offline";
+//     params.approval_prompt = "force";
+//     return params;
+// };
 
 ////////////////////////////////////////////////////////////////////////////////
 // Passport
@@ -91,7 +98,8 @@ app.post('/auth/login', passport.authenticate('local', { successRedirect: '/',
 app.get('/auth/google',
   passport.authenticate('google', {
     scope: 'openid profile email https://picasaweb.google.com/data/',
-    access_type: "offline"
+    accessType: "offline",
+    approvalPrompt: "force"
 }));
 // app.get('/auth/google/return',
 //     passport.authenticate('google', { successRedirect: '/',
@@ -116,3 +124,5 @@ app.get('/picasa/:albumid', picasa.getAlbum);
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+

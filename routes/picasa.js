@@ -11,6 +11,7 @@ var request = require('request')
     , async = require("async")
     , config = global.config;
 
+//request = request.defaults({'proxy':'http://localhost:8888', strictSSL: false})
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +54,9 @@ var contentDispRe = /filename="([^"]+)"/;
 
 
 
-
+/**
+ * View method: show user a list of their albums
+ */
 exports.getAlbums = function (req, res, next) {
     //inspect(req);
     var token = req.user.accessToken;
@@ -90,6 +93,9 @@ exports.getAlbums = function (req, res, next) {
 };
 
 
+/**
+ * View method: show user all the pictures in one of their albums
+ */
 exports.getAlbum = function (req, res) {
     var albumId = req.params.albumid;
     var token = req.user.accessToken;
@@ -138,7 +144,26 @@ exports.getAlbum = function (req, res) {
 };
 
 
+function googleRequest (accessToken, refreshToken, options, callback) {
+    options.headers = options.headers || {};
+    options.headers.Authorization = "Bearer " + accessToken;
+    var r = request(options, function (error, response, body) {
+        if (error) {
+            if (response.statusCode == 401) {
+                // get new access token
+            }
+        }
+    });
 
+
+}
+
+
+
+/**
+ * Extract the file name a Content-Disposition: HTTP header
+ * Returns null if it can' find a filename
+ */
 function getFilenameFromContDisp(orig) {
     var match = contentDispRe.exec(orig);
     if (match == null) return null;
@@ -148,6 +173,7 @@ function getFilenameFromContDisp(orig) {
 
 /**
  * Back up a picture from picasa to s3
+ * Used as a async.queue processor
  */
 function backup (details, callback) {
     //src, title, caption, userId, userType
@@ -162,7 +188,7 @@ function backup (details, callback) {
             "x-amz-meta-caption": details.caption || ""
         };
         var putReq =  knoxClient.put(filename, headers);
-        request.get(details.src).pipe(putReq);
+        request(details.src).pipe(putReq);
         putReq.on('response', function(res){
             console.log("Saved " + res.req.path );
             callback();
