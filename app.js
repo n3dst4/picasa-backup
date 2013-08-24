@@ -3,20 +3,18 @@
  * Module dependencies.
  */
 
-var express = require('express')
-  , routes = require('./routes')
-  , user = require('./routes/user')
-  , auth = require('./routes/auth')
-  , picasa = require('./routes/picasa')
-  //, account = require('./routes/account')
-  , http = require('http')
-  , path = require('path')
-  , passport = require('passport')
-  , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
-  , inspect = require("eyes").inspector()
-  , config = require('./config');
+ var config = global.config = require('./config')
+    , express = require('express')
+    , routes = require('./routes')
+    , user = require('./routes/user')
+    , auth = require('./routes/auth')
+    , picasa = require('./routes/picasa')
+    , http = require('http')
+    , path = require('path')
+    , passport = require('passport')
+    , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
+    , inspect = require("eyes").inspector();
 
-global.config = config;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Passport

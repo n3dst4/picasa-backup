@@ -1,0 +1,15 @@
+exports.googleOAuthDetails = {
+    clientID: "",
+    clientSecret: "",
+    callbackURL: ""
+};
+
+// for random guids which will work here, try 
+// http://www.guidgenerator.com/online-guid-generator.aspx
+
+exports.cookieSecret = '';
+exports.sessionSecret = '';
+
+exports.awsKey = '';
+exports.awsSecret = '';
+exports.awsBucket = '';
