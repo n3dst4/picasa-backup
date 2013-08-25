@@ -59,13 +59,12 @@ var contentDispRe = /filename="([^"]+)"/;
  */
 exports.getAlbums = function (req, res, next) {
     //inspect(req);
-    var token = req.user.accessToken;
     var id = req.user.profile.id;
     var url = "https://picasaweb.google.com/data/feed/api/user/" + id + "?thumbsize=160c";
     //url = "https://www.google.com/";
     //console.log("TOKEN: " +  token);
 
-    request.get({url: url, headers: { "Authorization": "Bearer " + token} },
+    googleRequest(req.user, {url: url},
         function(error, response, body){
         //inspect(response);
         if (error) return next(error);
@@ -98,12 +97,11 @@ exports.getAlbums = function (req, res, next) {
  */
 exports.getAlbum = function (req, res) {
     var albumId = req.params.albumid;
-    var token = req.user.accessToken;
     var userId = req.user.profile.id;
     //see https://developers.google.com/picasa-web/docs/2.0/reference#Parameters
     var url = "https://picasaweb.google.com/data/feed/api/user/" + userId +
         "/albumid/" + albumId + "?thumbsize=160c,1600u&imgmax=d";
-    request.get({url: url, headers: { "Authorization": "Bearer " + token} },
+    googleRequest(req.user, {url: url},
         function(error, response, body){
         if (error) return res.send(error);
         parseString(body, function (err, result) {
@@ -144,14 +142,47 @@ exports.getAlbum = function (req, res) {
 };
 
 
-function googleRequest (accessToken, refreshToken, options, callback) {
+function googleRequest (user, options, callback, doNotRetry) {
     options.headers = options.headers || {};
-    options.headers.Authorization = "Bearer " + accessToken;
+    options.headers.Authorization = "Bearer " + user.accessToken;
+    console.log("Attempting API request with access token " + user.accessKey);
     var r = request(options, function (error, response, body) {
-        if (error) {
-            if (response.statusCode == 401) {
-                // get new access token
+        if (response.statusCode == 403) {
+            if (doNotRetry) {
+                console.log("Refreshed credentials for user were still invalid");
+                return callback({
+                    message: "Refreshed credentials for user were still invalid"
+                });
             }
+            // we need to get a new access token
+            console.log("accessToken failure for user " + user.profile.displayName +
+                ", requesting a new one");
+            request({
+                url: 'https://accounts.google.com/o/oauth2/token',
+                method: 'POST',
+                form: {
+                    refresh_token: user.refreshToken,
+                    client_id: global.config.googleOAuthDetails.clientID,
+                    client_secret: global.config.googleOAuthDetails.clientSecret,
+                    grant_type: 'refresh_token'
+                }
+            }, function (error, response, body) {
+                if (error) {
+                    console.log("Unable to get new access token");
+                    return callback({
+                        message: "Unable to refresh user credentials",
+                        innerError: error,
+                        response: response
+                    });
+                }
+                console.log("access token recieved!");
+                debugger;
+                user.accessToken = JSON.parse(body).access_token;
+                googleRequest(user, options, callback, true);
+            });
+        } else {
+            console.log("access token was good for request");
+            callback(error, response, body);
         }
     });
 
