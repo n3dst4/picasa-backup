@@ -44,9 +44,12 @@ passport.use(new GoogleStrategy(
 ));
 
 passport.serializeUser(function(user, done) {
-    //console.log("serialize " + user);
-    done(null, JSON.stringify(user));
+    done(null, serializeUserToJSON(user));
 });
+
+function serializeUserToJSON(user) {
+    return JSON.stringify(user);
+}
 
 passport.deserializeUser(function(serialized, done) {
     //console.log("deserialize " + id);
@@ -57,7 +60,7 @@ passport.deserializeUser(function(serialized, done) {
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// Express
+// Express config
 
 var app = express();
 
@@ -70,6 +73,21 @@ app.use(express.logger('dev'));
 app.use(express.compress());
 
 app.use(express.bodyParser());
+
+// middleware: intercept the response just before headers are sent and
+// reserialize the user object back into the session.
+// this is needed because we don't have any other backing store for users
+app.use(function (req, res, next) {
+    res.on('header', function () {
+        if (!(req.user && req.session)) return;
+        var ser = serializeUserToJSON(req.user);
+        var key = passport._key;
+        req.session[key] = req.session[key] || {};
+        req.session[key].user = ser;
+    });
+    next();
+});
+
 app.use(express.cookieParser(config.cookieSecret));
 app.use(express.cookieSession({secret: config.sessionSecret}));
 
@@ -82,11 +100,17 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // development only
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());
-    //app.locals.pretty = true;
+    app.locals.pretty = true;
 }
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// routes
 
 app.get('/', routes.index);
 app.get('/users', user.list);

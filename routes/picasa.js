@@ -145,13 +145,14 @@ exports.getAlbum = function (req, res) {
 function googleRequest (user, options, callback, doNotRetry) {
     options.headers = options.headers || {};
     options.headers.Authorization = "Bearer " + user.accessToken;
-    console.log("Attempting API request with access token " + user.accessKey);
+    console.log("Attempting API request with access token " + user.accessToken);
     var r = request(options, function (error, response, body) {
         if (response.statusCode == 403) {
             if (doNotRetry) {
                 console.log("Refreshed credentials for user were still invalid");
                 return callback({
-                    message: "Refreshed credentials for user were still invalid"
+                    message: "New access token for user was still invalid",
+                    accessToken: user.accessToken
                 });
             }
             // we need to get a new access token
@@ -176,7 +177,6 @@ function googleRequest (user, options, callback, doNotRetry) {
                     });
                 }
                 console.log("access token recieved!");
-                debugger;
                 user.accessToken = JSON.parse(body).access_token;
                 googleRequest(user, options, callback, true);
             });
@@ -185,8 +185,6 @@ function googleRequest (user, options, callback, doNotRetry) {
             callback(error, response, body);
         }
     });
-
-
 }
 
 
