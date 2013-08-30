@@ -105,6 +105,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());
     app.locals.pretty = true;
+
+    //require('nock').recorder.rec();
 }
 
 

@@ -9,7 +9,8 @@ var request = require('request')
     , knox = require("knox")
     , parseString = require('xml2js').parseString
     , async = require("async")
-    , config = global.config;
+    , config = global.config
+    , debug = require('debug')('picasabackup:picasa');
 
 //request = request.defaults({'proxy':'http://localhost:8888', strictSSL: false})
 
@@ -64,7 +65,7 @@ exports.getAlbums = function (req, res, next) {
     //url = "https://www.google.com/";
     //console.log("TOKEN: " +  token);
 
-    googleRequest(req.user, {url: url},
+    googleRequest(req.user, url,
         function(error, response, body){
         //inspect(response);
         if (error) return next(error);
@@ -101,7 +102,7 @@ exports.getAlbum = function (req, res) {
     //see https://developers.google.com/picasa-web/docs/2.0/reference#Parameters
     var url = "https://picasaweb.google.com/data/feed/api/user/" + userId +
         "/albumid/" + albumId + "?thumbsize=160c,1600u&imgmax=d";
-    googleRequest(req.user, {url: url},
+    googleRequest(req.user, url,
         function(error, response, body){
         if (error) return res.send(error);
         parseString(body, function (err, result) {
@@ -127,10 +128,11 @@ exports.getAlbum = function (req, res) {
                 for (var i in photos) {
                     queue.push({
                         src: photos[i].downloadUrl,
-                        title:photos[i].title,
-                        caption: photos[i].caption || "",
+                        userType: "google",
                         userId: req.user.profile.id,
-                        userType: "google"
+                        album: title,
+                        title:photos[i].title,
+                        caption: photos[i].caption || ""
                     });
                 }
             });
@@ -143,9 +145,10 @@ exports.getAlbum = function (req, res) {
 
 
 function googleRequest (user, options, callback, doNotRetry) {
+    if (_.isString(options)) options = {url: options};
     options.headers = options.headers || {};
     options.headers.Authorization = "Bearer " + user.accessToken;
-    console.log("Attempting API request with access token " + user.accessToken);
+    debug("Attempting API request with access token " + user.accessToken);
     var r = request(options, function (error, response, body) {
         if (response.statusCode == 403) {
             if (doNotRetry) {
